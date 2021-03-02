@@ -1,15 +1,30 @@
 const express = require('express');
+const { GraphQLServer, PubSub }  =  require('graphql-yoga')
+const Query  = require( './resolvers/Query')
+const Mutation = require('./resolvers/Mutation')
+const schema = require('./schema/schema');
+const Subscription =  require('./resolvers/Subscription')
 const mongoose = require('mongoose');
-//const schema = require('./schema');
 const bodyParser = require('body-parser');
-const cors = require('cors');
+
+const app = express();
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 
 
 
-const { ApolloServer } = require('apollo-server-express');
+
+
+const pubSub = new PubSub()
+
+
 
 const url = "mongodb://localhost:27017/web";
-const connect = mongoose.connect(url, { useNewUrlParser: true });
+const connect = mongoose.connect(url, { useNewUrlParser: true,
+    useCreateIndex: true,
+    useFindAndModify: false,
+    useUnifiedTopology: true });
 connect.then((db) => {
     console.log('Connected correctly to server!');
 }, (err) => {
@@ -17,18 +32,23 @@ connect.then((db) => {
 });
 
 
+const server = new GraphQLServer({
+    typeDefs: schema,
+    resolvers: {
+        Query,
+        Subscription,
+        Mutation,
+    },
+    context: {
+        pubSub: pubSub
+    }
 
-const server = new ApolloServer({
+})
 
-});
-
-const app = express();
-
-app.use(bodyParser.json());
-app.use('*', cors());
+// const app = express();
+//
+// app.use(bodyParser.json());
+// app.use('*', cors());
 
 
-server.applyMiddleware({ app });
-
-app.listen({ port: 4000 }, () =>
-    console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`));
+server.start(() => console.log('Server is running on localhost:4000'))

@@ -1,22 +1,21 @@
 {
-  "name": "graphql-node-mongo",
+  "name": "garphql_server",
   "version": "1.0.0",
-  "description": "",
+  "description": "graphQL server",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon src/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "kennedy",
-  "license": "ISC",
-  "devDependencies": {
-    "nodemon": "^2.0.7"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js"
   },
   "dependencies": {
-    "apollo-server-express": "^2.21.0",
-    "body-parser": "^1.19.0",
-    "cors": "^2.8.5",
-    "express": "^4.17.1",
-    "mongoose": "^5.11.18"
-  }
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4",
+    "mongoose": "^5.4.0",
+    "graphql-yoga": "1.16.7"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.7"
+  },
+  "author": "",
+  "license": "ISC"
 }
